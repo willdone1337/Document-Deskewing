@@ -38,10 +38,10 @@ class RotateDoc:
     
 
     def rotateImage(self,
-					image:np.ndarray,
-					angle:int,
+		    image:np.ndarray,
+		    angle:Union[int,float],
                     skimg:bool=True
-					) -> np.ndarray:
+		   )-> np.ndarray:
         if skimg:
             return rotate(image,angle)
         
@@ -54,7 +54,7 @@ class RotateDoc:
 
     def readImage(self,
                   path:str,
-				 ) -> np.ndarray:
+		) -> np.ndarray:
         image = cv2.imread(path)
         h, w =image.shape[:2]
         image = cv2.resize(image,(int(h/self.resize_ration),int(w/self.resize_ration)))
@@ -63,38 +63,38 @@ class RotateDoc:
 
 
     def get_max(self,
-                test,
+                fft:np.ndarray,
                 site:str='Left'
                 ) -> Tuple:
 
         if site == 'top':
-            for x in range(test.shape[0]):
-                for y in range(test.shape[1]):
-                    if (test[x,y]) >= 1:
+            for x in range(fft.shape[0]):
+                for y in range(fft.shape[1]):
+                    if (fft[x,y]) >= 1:
                         return x,y
 
         if site == 'bottom':
-            for x in range(test.shape[0]-1,0,-1):
-                for y in range(test.shape[1]):
-                    if (test[x,y]) >= 1:
+            for x in range(fft.shape[0]-1,0,-1):
+                for y in range(fft.shape[1]):
+                    if (fft[x,y]) >= 1:
                         return x,y
                 
         if site == 'left':
-            for y in range(test.shape[1]):
-                for x in range(test.shape[0]):
-                    if (test[x,y]) >= 1:
+            for y in range(fft.shape[1]):
+                for x in range(fft.shape[0]):
+                    if (fft[x,y]) >= 1:
                         return x,y
         
         if site == 'right':
-            for x in range(test.shape[0]):
-                for y in range(test.shape[1]-1,0,-1):
-                    if (test[x,y]) >= 1:
+            for x in range(fft.shape[0]):
+                for y in range(fft.shape[1]-1,0,-1):
+                    if (fft[x,y]) >= 1:
                         return x,y
 
     def fourierTransform(self,
-						image:np.ndarray,
+			image:np.ndarray,
                         syth:Optional[bool]=None
-						) -> np.ndarray:
+			) -> np.ndarray:
         if syth:# convert black pixels to 255 for Fourier stablity
             if image.max() > 1:
                 image[image==0] = 255
@@ -111,7 +111,9 @@ class RotateDoc:
 
     def calc_eucl(self,
                   lr:tuple,
-                  tb:tuple):
+                  tb:tuple
+		 )->tuple:
+	
         lr_dist = np.sqrt((lr[2]-lr[0])**2 + (lr[3]-lr[1])**2)
         tb_dist = np.sqrt((tb[2]-tb[0])**2 + (tb[3]-tb[1])**2)
 
@@ -120,8 +122,7 @@ class RotateDoc:
 
     def skew(self,
             fourier_image:np.ndarray,
-            
-                      ) -> float:
+            ) -> float:
         
         fourier_image = cv2.fastNlMeansDenoising(fourier_image, None, 20, 7, 21)
         if self.visualize:
