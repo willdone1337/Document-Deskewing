@@ -30,7 +30,7 @@ ____
 + `Calculate angle using slope of drawing line`
 
 ## P.S.
-*This method works well if angle of skew is between -60 and 60 degrees*
+*This method works well if angle of skew is between -60 and 60 degrees**
 
 
 ___
