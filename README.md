@@ -54,6 +54,7 @@ ___
 ___
 
 ## Synthetic test
+**In this test document manually rotated from -60 to 60 degree and check performance of methdod.  
 Rotate -60 degree                       | Deskew 63 degree  
 :-----------------------------------:|:-------------------------:
 <img src="saved_images/image_-60.jpg" width=128px title='ms'></img> | <img src="saved_images/image_63_after.jpg" width=128px title='asd'></img>
