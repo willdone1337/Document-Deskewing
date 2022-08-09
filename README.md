@@ -39,6 +39,7 @@ ___
 <img src="test_image/gray_image_bluerred.jpg" width=128px></img>
 <img src="test_image/after_fft.jpg" width=128px></img>
 <img src="test_image/after_denoise.jpg" width=128px></img>
+<img src="test_image/after_threshold.jpg" width=128px></img>
 <img src="test_image/after_drawline.jpg" width=128px></img>
 <img src="test_image/final.jpg" width=128px></img>
 
