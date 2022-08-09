@@ -142,11 +142,12 @@ class RotateDoc:
             right_x,right_y = self.get_max(fourier_image,'right')
             top_x,top_y = self.get_max(fourier_image,'top')
             bottom_x,bottom_y = self.get_max(fourier_image,'bottom')
-            x1,y1,x2,y2 = long_dist_pair[0], long_dist_pair[1], long_dist_pair[2], long_dist_pair[3]
             long_dist_pair = self.calc_eucl(
                                     (left_x,left_y,right_x,right_y),
                                     (top_x,top_y,bottom_x,bottom_y)
                                     )
+	    x1,y1,x2,y2 = long_dist_pair[0], long_dist_pair[1], long_dist_pair[2], long_dist_pair[3]
+            
 
         fourier_image = cv2.cvtColor(fourier_image,cv2.COLOR_GRAY2RGB)
         
