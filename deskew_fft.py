@@ -154,7 +154,7 @@ class RotateDoc:
 
     def calc_eucl(self,
                   lr: tuple,
-                  tb: tuple):
+                  tb: tuple)->tuple:
         """
         Args:
              --- lr is left, right coordinates
