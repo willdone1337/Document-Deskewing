@@ -7,7 +7,7 @@
 >[Fast Fourier Transform](https://pythonnumericalmethods.berkeley.edu/notebooks/chapter24.03-Fast-Fourier-Transform.html)
 
 ---
-+ **Non Local Mean Denoising**
++ **Non Local Means Denoising**
 
 >[Article about NLMD](http://www.ipol.im/pub/art/2011/bcm_nlm/article.pdf)
 
