@@ -145,7 +145,7 @@ class RotateDoc:
                 image[image == 0] = 1
 
         f_img = np.fft.fft2(image)
-        f_shift = np.fft.fftshift(f_img)
+        f_shift = np.log(np.fft.fftshift(f_img))
         f_shift = (f_shift - f_shift.min()) * (255 / (f_shift.max() - f_shift.min()))
         f_shift = f_shift.astype(np.uint8)
 
