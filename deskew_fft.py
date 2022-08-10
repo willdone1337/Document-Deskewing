@@ -232,7 +232,7 @@ class RotateDoc:
 
     def deskewImage(self,
                     angle: Optional[Union[int, float]] = None
-                    ) -> Tuple[Union[float, int], np.ndarray]:
+                    ) -> Union[float, int]:
         """
         Args:
              --- angle of correction
@@ -256,8 +256,5 @@ class RotateDoc:
             plt.imshow(image_fft)
             plt.show()
         angle = self.deskew(image_fft)
-        image = self.rotateImage(image, angle, True)
-        if self.visualize:
-            plt.imshow(image)
-            plt.show()
-        return angle, image
+        
+        return angle
