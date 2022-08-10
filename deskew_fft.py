@@ -1,4 +1,3 @@
-from lib2to3.pgen2.token import OP
 from unittest import skip
 import cv2
 import matplotlib.pyplot as plt
