@@ -110,7 +110,7 @@ Rotate 50 degree                       | Deskew -55 degree
 
 Rotate 60 degree                       | Deskew -65 degree  
 :-----------------------------------:|:-------------------------:
-<img src="saved_images/image_20.jpg" width=128px title='ms'></img> | <img src="saved_images/image_-24_after.jpg" width=128px title='asd'></img>
+<img src="saved_images/image_60.jpg" width=128px title='ms'></img> | <img src="saved_images/image_-65_after.jpg" width=128px title='asd'></img>
 
 
 <!-- 
