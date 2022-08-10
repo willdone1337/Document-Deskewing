@@ -261,25 +261,3 @@ class RotateDoc:
             plt.imshow(image)
             plt.show()
         return angle, image
-
-
-def test_rotate_class():
-    path = 'test_image_1.jpg'
-    for angle in range(-60, 70, 10):
-        print(angle)
-        rotated_image = rotate(io.imread(path), angle)
-        rotate_doc = RotateDoc(
-            img_path=path,
-            visualize=False,
-            resize_ratio=2,
-            peak_top_bottom=True,
-            synth=True
-        )
-        ag, image_rotate = rotate_doc.deskewImage(angle=angle)
-        print(ag)
-        rotated_image = rotate(rotated_image, ag)
-        print('-' * 100)
-
-
-if __name__ == '__main__':
-    test_rotate_class()
