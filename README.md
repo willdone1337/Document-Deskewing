@@ -46,7 +46,7 @@ ___
 ___
 ## Code usage
 ```python
-from test_doc import RotateDoc
+from deskew_fft import RotateDoc
 from skimage.transform import rotate
 import skimage.io as io
 import matplotlib.pyplot as plt
@@ -149,7 +149,7 @@ ___
 ---
 ## Synthetic test code
 ```python 
-from test_doc import RotateDoc
+from deskew_fft import RotateDoc
 from skimage.transform import rotate
 import skimage.io as io
 import matplotlib.pyplot as plt
