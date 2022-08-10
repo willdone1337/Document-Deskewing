@@ -104,7 +104,7 @@ class RotateDoc:
         """
         Args:
             --- site ---
-	Find the first left, right, top, and bottom pixels for getting a line for further angle determination.
+	Find the first left, right, top, and bottom pixels that not equal to zero for getting a line for further angle determination.
         """
         if site == 'top':
             for x in range(fft.shape[0]):
