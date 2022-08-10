@@ -38,7 +38,7 @@ class RotateDoc:
                  ) -> None:
         """
         Args:
-            --- Synth used if image rotated manually where edges of image are black.
+            --- Synth used if image rotated manually where edges of image are black and replace them with white pixels.
                 Black pixel grids affect noise in FFT.
                 If you inference set synth to False
             --- peak_top_bottom is boolean parameter using in get_max() function. If set False choosing peaks
