@@ -1,5 +1,5 @@
 # Deskew Scanned Document 
-  ### Deskewing document is one of the essemtial preprcessing before OCR and HTR. This repo contain proposed method for document deskewing mainly via Fourier Transform
+  ### Deskewing document is one of the essemtial preprcessing before OCR and HTR. This repo contain proposed method for document deskewing mainly via Fourier Transform and some simple geometry.
 ## Techniques
 ---
 + **Fourier Transform**
