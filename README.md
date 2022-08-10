@@ -119,7 +119,7 @@ Rotate 60 degree                       | Deskew -65 degree
 ![alt-text-1](saved_images/image_30.jpg "title-1") ![alt-text-2](saved_images/image_-35_after.jpg "title-2")
 ![alt-text-1](saved_images/image_40.jpg "title-1") ![alt-text-2](saved_images/image_-47_after.jpg "title-2")
 ![alt-text-1](saved_images/image_50.jpg "title-1") ![alt-text-2](saved_images/image_-55_after.jpg "title-2")
-![alt-text-1](saved_images/image_60.jpg "title-1") ![alt-text-2](saved_images/image_-65_after.jpg "title-2") --> -->
+![alt-text-1](saved_images/image_60.jpg "title-1") ![alt-text-2](saved_images/image_-65_after.jpg "title-2") -->
 ___
 
 
