@@ -43,6 +43,30 @@ ___
 <img src="test_image/after_drawline.jpg" width=128px></img>
 <img src="test_image/final.jpg" width=128px></img>
 
+___
+## Code usage
+```python
+from test_doc import RotateDoc
+from skimage.transform import rotate
+import skimage.io as io
+import matplotlib.pyplot as plt
+
+path = 'test_image_1.jpg'
+rotate_doc = RotateDoc(
+            img_path=path,
+            visualize=1,
+            resize_ratio=2,
+            peak_top_bottom=True,
+            synth=False
+            )
+
+image = io.imread(path)
+ag, image_rotate = rotate_doc.deskewImage()
+rotated_image = rotate(image,ag)
+if rotate_doc.visualize:
+    plt.imshow(rotated_image)
+    plt.show()
+```
 
 
 <!-- ![gray](test_image/gray_image.jpg)
@@ -122,4 +146,29 @@ Rotate 60 degree                       | Deskew -65 degree
 ![alt-text-1](saved_images/image_60.jpg "title-1") ![alt-text-2](saved_images/image_-65_after.jpg "title-2") -->
 ___
 
+---
+## Synthetic test code
+```python 
+from test_doc import RotateDoc
+from skimage.transform import rotate
+import skimage.io as io
+import matplotlib.pyplot as plt
+
+path = 'test_image_1.jpg'
+for angle in range(-60,70,10):
+    rotated_image = rotate(io.imread(path),angle)
+    rotate_doc = RotateDoc(
+                            img_path=path,
+                            visualize=1,
+                            resize_ratio=2,
+                            peak_top_bottom=True,
+                            synth=True
+                            )
+    ag = rotate_doc.deskewImage(angle=angle)
+    rotated_image = rotate(rotated_image,ag)
+    if rotate_doc.visualize:
+        plt.imshow(rotated_image)
+        plt.show()
+    print('-'*100)
+```
 
