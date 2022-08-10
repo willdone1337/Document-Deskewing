@@ -68,7 +68,7 @@ class RotateDoc:
 
     def rotateImage(self,
                     image: np.ndarray,
-                    angle: int,
+                    angle: Union[int,float],
                     skimg: bool = True
                     ) -> np.ndarray:
         """
