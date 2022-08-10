@@ -17,12 +17,23 @@ class RotateDoc:
                 img_path:str,
                 resize_ratio:Union[int,float]=2,
                 visualize:Optional[bool]=None,
-                peak_top_bottom:bool=True
+                peak_top_bottom:bool=True,
+                synth:Optional[bool]=None
                 ) -> None:
+        """
+        Args:
+            --- Synth used if image rotated manually where edges of image are black.
+                Black pixel grids affect noise in FFT. 
+                If you inference set synth to False
+            --- peak_top_bottom is boolean parameter. If set False choosing peaks
+                of thresholded Fourier image use all (left,right,top,bottom) peaks 
+        """
         self.image_path = img_path
         self.resize_ration = resize_ratio
         self.visualize = visualize
         self.peak_top_bottom = peak_top_bottom
+        self.synth = synth
+        
 
     def blurImage(self,
                  image:np.ndarray,
@@ -36,12 +47,11 @@ class RotateDoc:
         
         return image
     
-
     def rotateImage(self,
-		    image:np.ndarray,
-		    angle:Union[int,float],
-                    skimg:bool=True
-		   )-> np.ndarray:
+			image:np.ndarray,
+			angle:int,
+			skimg:bool=True
+			) -> np.ndarray:
         if skimg:
             return rotate(image,angle)
         
@@ -54,7 +64,7 @@ class RotateDoc:
 
     def readImage(self,
                   path:str,
-		) -> np.ndarray:
+		  ) -> np.ndarray:
         image = cv2.imread(path)
         h, w =image.shape[:2]
         image = cv2.resize(image,(int(h/self.resize_ration),int(w/self.resize_ration)))
@@ -70,32 +80,32 @@ class RotateDoc:
         if site == 'top':
             for x in range(fft.shape[0]):
                 for y in range(fft.shape[1]):
-                    if (fft[x,y]) >= 1:
+                    if (fft[x,y]) != 0:
                         return x,y
 
         if site == 'bottom':
             for x in range(fft.shape[0]-1,0,-1):
                 for y in range(fft.shape[1]):
-                    if (fft[x,y]) >= 1:
+                    if (fft[x,y]) != 0:
                         return x,y
                 
         if site == 'left':
             for y in range(fft.shape[1]):
                 for x in range(fft.shape[0]):
-                    if (fft[x,y]) >= 1:
+                    if (fft[x,y]) != 0:
                         return x,y
         
         if site == 'right':
             for x in range(fft.shape[0]):
                 for y in range(fft.shape[1]-1,0,-1):
-                    if (fft[x,y]) >= 1:
+                    if (fft[x,y]) != 0:
                         return x,y
 
     def fourierTransform(self,
 			image:np.ndarray,
-                        syth:Optional[bool]=None
 			) -> np.ndarray:
-        if syth:# convert black pixels to 255 for Fourier stablity
+
+        if self.synth:
             if image.max() > 1:
                 image[image==0] = 255
             else:
@@ -103,26 +113,23 @@ class RotateDoc:
 
         f_img = np.fft.fft2(image)
         f_shift = np.fft.fftshift(f_img)
-        f_shift = 20*np.log(np.abs(f_shift)) #20*log for stability i guess
+        f_shift = 20*np.log(np.abs(f_shift)) #20* - for stability
         f_shift = (f_shift - f_shift.min())*(255/(f_shift.max()-f_shift.min()))
         f_shift = f_shift.astype(np.uint8)
-
         return f_shift
 
     def calc_eucl(self,
                   lr:tuple,
-                  tb:tuple
-		 )->tuple:
-	
+                  tb:tuple):
         lr_dist = np.sqrt((lr[2]-lr[0])**2 + (lr[3]-lr[1])**2)
         tb_dist = np.sqrt((tb[2]-tb[0])**2 + (tb[3]-tb[1])**2)
 
         return tb if tb_dist > lr_dist else lr
 
-
-    def skew(self,
+    def deskew(self,
             fourier_image:np.ndarray,
-            ) -> float:
+            
+                      ) -> float:
         
         fourier_image = cv2.fastNlMeansDenoising(fourier_image, None, 20, 7, 21)
         if self.visualize:
@@ -142,15 +149,13 @@ class RotateDoc:
             right_x,right_y = self.get_max(fourier_image,'right')
             top_x,top_y = self.get_max(fourier_image,'top')
             bottom_x,bottom_y = self.get_max(fourier_image,'bottom')
+            x1,y1,x2,y2 = long_dist_pair[0], long_dist_pair[1], long_dist_pair[2], long_dist_pair[3]
             long_dist_pair = self.calc_eucl(
                                     (left_x,left_y,right_x,right_y),
                                     (top_x,top_y,bottom_x,bottom_y)
                                     )
-	    x1,y1,x2,y2 = long_dist_pair[0], long_dist_pair[1], long_dist_pair[2], long_dist_pair[3]
-            
 
         fourier_image = cv2.cvtColor(fourier_image,cv2.COLOR_GRAY2RGB)
-        
         ang = self.get_angel(x1,y1,x2,y2)
 
         if self.visualize:
@@ -162,17 +167,18 @@ class RotateDoc:
         return ang
 
     def get_angel(self,
-                  x1:int,
-                  y1:int,
-                  x2:int,
-                  y2:int
+                  x1:float,
+                  y1:float,
+                  x2:float,
+                  y2:float
                   ) -> float:
-        lineA = ((x1,y1),(x2,y2))
-
-        slope1 = (y2-y1)/(x2-x1) #self.slope(lineA[0][0], lineA[0][1], lineA[1][0], lineA[1][1])
-        slope2 = 0 #self.slope(lineB[0][0], lineB[0][1], lineB[1][0], lineB[1][1])
-
-        return math.degrees(math.atan(-slope1))
+        slope = (y2-y1)/(x2-x1) 
+        """
+        if we have line with formula y=kx+b then tg(alfa)=k
+        k-is a slope of a line
+        https://lms2.sseu.ru/courses/eresmat/course1/razd9z1/par9_6z1.htm
+        """
+        return math.degrees(math.atan(-slope))
 
 
     def deskewImage(self,
@@ -191,11 +197,11 @@ class RotateDoc:
         else:
             image_rotated = image_blurred
 
-        image_fft = self.fourierTransform(image_rotated,syth=True)
+        image_fft = self.fourierTransform(image_rotated)
         if self.visualize:
             plt.imshow(image_fft)
             plt.show()
-        angle = self.skew(image_fft)
+        angle = self.deskew(image_fft)
         image = self.rotateImage(image,angle,True)
         if self.visualize:
             plt.imshow(image)
@@ -203,32 +209,25 @@ class RotateDoc:
         return angle, image
 
 
+
 def test_rotate_class():
-    # path = 'i3.jpg'
     path = 'test_image_1.jpg'
     for angle in range(-60,70,10):
         print(angle)
-        # if angle == 0:
-        #     continue
         rotated_image = rotate(io.imread(path),angle)
-        rotate_doc = RotateDoc(img_path=path,visualize=False)
+        rotate_doc = RotateDoc(
+                               img_path=path,
+                               visualize=False,
+                               resize_ratio=2,
+                               peak_top_bottom=True,
+                               synth=True
+                               )
         ag, image_rotate = rotate_doc.deskewImage(angle=angle)
         print(ag)
         rotated_image = rotate(rotated_image,ag)
         print('-'*100)
         
-test_rotate_class()
 
 
-# imgs = ['gray_image.jpg',
-# 'gray_image_bluerred.jpg',
-# 'after_fft.jpg',
-# 'after_denoise.jpg',
-# 'after_threshold.jpg','after_drawline.jpg',
-# 'after_drawline2.jpg','final.jpg']
-
-
-# for x in imgs:
-#     image = cv2.imread(x)
-#     image = cv2.resize(image,(256,384))
-#     cv2.imwrite(x,image)
+if __name__ == '__main__':        
+    test_rotate_class()
