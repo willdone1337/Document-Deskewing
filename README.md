@@ -61,7 +61,7 @@ rotate_doc = RotateDoc(
             )
 
 image = io.imread(path)
-ag, image_rotate = rotate_doc.deskewImage()
+ag = rotate_doc.deskewImage()
 rotated_image = rotate(image,ag)
 if rotate_doc.visualize:
     plt.imshow(rotated_image)
